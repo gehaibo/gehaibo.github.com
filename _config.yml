@@ -1,122 +1,39 @@
-# Site configuration
-# 1. Files excluded from Jekyll builds
-# 2. Installed Gems
-# 3. Gem settings
-# 4. Jekyll settings
-# 5. Collections
-# 6. Jekyll collections settings
-# 7. Site settings
-# 8. Site navigation
+# Site settings
+name: Less Or More
+email: luoyan35714@126.com
+author: Freud Kang
+url: http://www.hifreud.com
+resume_site: http://www.hifreud.com/Resume.io/
+github: https://github.com/luoyan35714/
+baseurl: "/LessOrMore"
+description: Actually, less is more!
+meta_description: 康志华;个人博客;学而不思则罔;思而不学则殆;生命不止;折腾不休
+motto: It's our wits that make us men.
+banner: 学而不思则罔，思而不学则殆。
 
-# 1. Files excluded from Jekyll builds
-exclude:
-- README.md
-- screenshot.png
-- LICENSE
-- CNAME
-- Gemfile
-- Gemfile.lock
-- demo/*
-- alembic-jekyll-theme.gemspec
+#permalink: /:categories/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
+paginate: 10
 
-# 2. Installed Gems
-gems:
-- jekyll-sitemap
-- jekyll-mentions
-- jekyll-paginate
-- jekyll-seo-tag
-- jekyll-redirect-from
-- jekyll-feed
-- jemoji
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 
-# 3. Gem settings
-paginate: 2 # jekyll-paginate > items per page
-paginate_path: blog/page:num # jekyll-paginate > blog page
-jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
-twitter:
-  username: DavidDarnes # jekyll-seo-tag > Owners twitter username
-author: DavidDarnes # jekyll-seo-tag > default author
-social: # jekyll-seo-tag > social overrides
-  name: David Darnes # jekyll-seo-tag > real name
-  links:  # jekyll-seo-tag > social aliases (sameAs)
-    - https://twitter.com/DavidDarnes
-    - https://www.facebook.com/daviddarnes
-    - https://www.linkedin.com/in/daviddarnes
-    - https://plus.google.com/+DavidDarnes
-    - https://github.com/daviddarnes
+github_username: luoyan35714
+highlighter: Pygments
 
-# 4. Jekyll settings
-sass:
-  style: compressed # Style compression
-permalink: pretty  # Permalink style (/YYYY/MM/DD/page-name/)
-excerpt_separator: <!-- more --> # Marks end of excerpt in posts
-timezone: Europe/London # Timezone for blog posts and alike
+# Build settings
+markdown: kramdown
 
-# 5. Collections
-collections:
-  posts:
-    title: Posts # Needed for Siteleaf
-    output: true
-    description: "My thoughts and ideas" # The post list page content
-    feature_text: |
-      Welcome to the blog
-    feature_image: "https://unsplash.it/1300/400?image=1067"
+baidu_analysis: 94be4b0f9fc5d94cc0d0415ea6761ae9
 
-# 6. Jekyll collections settings
-defaults:
-  -
-    scope:
-      path: ""
-      type: pages
-    values:
-      layout: page # Default layout
-      image: "/assets/placeholder-social.png" # Default image for sharing
-  -
-    scope:
-      path: ""
-      type: posts
-    values:
-      layout: post # Default layout
-      image: "/assets/placeholder-social.png" # Default image for sharing
-
-# 7. Site settings
-encoding: utf-8 # Make sure the encoding is right
-title: "Alembic" # Site name or title, also used in jekyll-seo-tag
-logo: "/assets/placeholder-logo.svg" # Site logo, also used in jekyll-seo-tag
-description: "Alembic is a starting point for Jekyll projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately" # Site description and default description, also used in jekyll-seo-tag
-url: "https://alembic.darn.es" # Site url, also used in jekyll-seo-tag
-repo: "https://github.com/daviddarnes/alembic"
-email: "me@daviddarnes.com"
-disqus: "alembic-1"
-avatarurl: "https://www.gravatar.com/avatar/6c0377abcf4da91cdd35dea4554b2a4c" # Uses avatars for favicons to get multple sites, eg Gravatar, Twitter, GitHub
-
-# 8. Site navigation
-navigation_header:
-  Home: /
-  Elements: /elements/
-  Blog: /blog/
-  Categories: /categories/
-  Search: /search/
-  Fork Alembic: https://github.com/daviddarnes/alembic
-
-navigation_footer:
-  Created by David Darnes: https://darn.es
-
-social_links:
-  Twitter: https://twitter.com/DavidDarnes
-  LinkedIn: https://www.linkedin.com/in/daviddarnes
-  Google+: https://plus.google.com/+DavidDarnes
-  GitHub: https://github.com/daviddarnes
-  link: https://darn.es
-
-sharing_links:
-  Twitter: "#1DA1F2"
-  facebook: "#3B5998"
-  Google+: "#DC4E41"
-  Pinterest: "#BD081C"
-  LinkedIn: "#0077B5"
-  tumblr: "#36465D"
-  Reddit: "#FF4500"
-  Hacker News: "#ff6600"
-  Designer News: "#2D72D9"
-  Email: ""
+FB:
+  comments :
+    provider : duoshuo
+    duoshuo:
+        short_name : luoyan35714
+    disqus :
+        short_name : freudkang
+    # facebook :
+    #   appid : 123
+    #   num_posts: 5
+    #   width: 580
+    #   colorscheme: light
