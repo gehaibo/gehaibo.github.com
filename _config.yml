@@ -1,12 +1,12 @@
 # Site settings
-name:  海波的博客
+name: 海波的博客
 email: ghbhust@qq.com
 author: ghb
 url: https://gehaibo.github.io/
-resume_site: 
-github: https://github.com/gehaibo/gehaibo.github.com.git
+resume_site:
+github: https://github.com/gehaibo
 baseurl: ""
-description: 
+description: Stay hungry, stay foolish.
 meta_description: 葛海波;个人博客;
 motto: Make it right before you make it faster.
 banner: 要让事情变得更好，先让自己变得更强！
@@ -25,13 +25,13 @@ markdown: kramdown
 
 baidu_analysis: 94be4b0f9fc5d94cc0d0415ea6761ae9
 
-FB:
-  comments :
-    provider : duoshuo
-    duoshuo:
-        short_name : 多说账户
-    disqus :
-        short_name : Disqus账户
+# FB:
+#   comments :
+#     provider : duoshuo
+#     duoshuo:
+#         short_name :
+#     disqus :
+#         short_name :
     # facebook :
     #   appid : 123
     #   num_posts: 5
