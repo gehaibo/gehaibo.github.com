@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Spring MVC使用笔记 - (一)文件上传 - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2015/02/25/06-spring-mvc-file-upload/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="Spring MVC使用笔记 - (一)文件上传, 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>Spring MVC使用笔记 - (一)文件上传</h1>
+		    <p>Post on Feb 25, 2015 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#技术文档-ref">技术文档</a>	/
+    	<a href="/tag/#Spring-ref">Spring</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">Spring MVC使用笔记 - (一)文件上传</h1>
+              <!--
+                <p class="post-meta">Feb 25, 2015</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Feb 25, 2015</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#webxml" id="markdown-toc-webxml">web.xml</a></li>
+  <li><a href="#web-app-servletxml" id="markdown-toc-web-app-servletxml">web-app-servlet.xml</a></li>
+  <li><a href="#controller类中的实现" id="markdown-toc-controller类中的实现">controller类中的实现</a>    <ul>
+      <li><a href="#测试" id="markdown-toc-测试">测试</a></li>
+    </ul>
+  </li>
+  <li><a href="#第一种测试用jsp为uploadjsp" id="markdown-toc-第一种测试用jsp为uploadjsp">第一种:测试用JSP为upload.jsp</a></li>
+  <li><a href="#第二种测试用程序动态控制" id="markdown-toc-第二种测试用程序动态控制">第二种:测试用程序动态控制</a></li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料</a></li>
+</ul>
+
+<h1 id="webxml">web.xml</h1>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;listener&gt;</span>
+<span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
+<span class="nt">&lt;/listener&gt;</span>
+<span class="nt">&lt;servlet&gt;</span>
+<span class="nt">&lt;servlet-name&gt;</span>web-app<span class="nt">&lt;/servlet-name&gt;</span>
+<span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+<span class="nt">&lt;init-param&gt;</span>
+  <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+  <span class="nt">&lt;param-value&gt;</span>/WEB-INF/web-app-servlet.xml<span class="nt">&lt;/param-value&gt;</span>
+<span class="nt">&lt;/init-param&gt;</span>
+<span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+<span class="nt">&lt;servlet-name&gt;</span>web-app<span class="nt">&lt;/servlet-name&gt;</span>
+<span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span></code></pre></figure>
+
+<h1 id="web-app-servletxml">web-app-servlet.xml</h1>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span>
+	<span class="na">class=</span><span class="s">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span>
+	<span class="na">p:viewClass=</span><span class="s">"org.springframework.web.servlet.view.JstlView"</span> 
+	<span class="na">p:prefix=</span><span class="s">"/WEB-INF/jsp/"</span>
+	<span class="na">p:suffix=</span><span class="s">".jsp"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"multipartResolver"</span>
+	<span class="na">class=</span><span class="s">"org.springframework.web.multipart.commons.CommonsMultipartResolver"</span><span class="nt">&gt;</span>
+	<span class="c">&lt;!-- 限制上传文件大小,单位byte --&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxUploadSize"</span> <span class="na">value=</span><span class="s">"1024000000"</span><span class="nt">&gt;&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre></figure>
+
+<h1 id="controller类中的实现">controller类中的实现</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/upload"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">upload</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">String</span> <span class="n">parameter</span><span class="o">)</span>
+    <span class="kd">throws</span> <span class="n">Exception</span>
+<span class="o">{</span>
+    <span class="cm">/** 检验传入参数。 */</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">parameter</span><span class="o">);</span>
+    
+    <span class="n">MultipartHttpServletRequest</span> <span class="n">multipartRequest</span> <span class="o">=</span> <span class="o">(</span><span class="n">MultipartHttpServletRequest</span><span class="o">)</span><span class="n">request</span><span class="o">;</span>
+    <span class="n">SimpleDateFormat</span> <span class="n">dateformat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+    <span class="cm">/** 构建图片保存的目录 **/</span>
+    <span class="n">String</span> <span class="n">logoPathDir</span> <span class="o">=</span> <span class="s">"/resources/img/"</span> <span class="o">+</span> <span class="n">dateformat</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+    <span class="cm">/** 得到图片保存目录的真实路径 **/</span>
+    <span class="n">String</span> <span class="n">logoRealPathDir</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">().</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getRealPath</span><span class="o">(</span><span class="n">logoPathDir</span><span class="o">);</span>
+    <span class="cm">/** 根据真实路径创建目录 **/</span>
+    <span class="n">File</span> <span class="n">logoSaveFile</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">logoRealPathDir</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">logoSaveFile</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span>
+        <span class="n">logoSaveFile</span><span class="o">.</span><span class="na">mkdirs</span><span class="o">();</span>
+    <span class="cm">/** 页面控件的文件流 **/</span>
+    <span class="n">MultipartFile</span> <span class="n">multipartFile</span> <span class="o">=</span> <span class="n">multipartRequest</span><span class="o">.</span><span class="na">getFile</span><span class="o">(</span><span class="s">"file"</span><span class="o">);</span>
+    
+    <span class="c1">// 构建非重复文件名称</span>
+    <span class="n">String</span> <span class="n">logImageName</span> <span class="o">=</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">multipartFile</span><span class="o">.</span><span class="na">getOriginalFilename</span><span class="o">();</span>
+    
+    <span class="cm">/** 拼成完整的文件保存路径加文件 **/</span>
+    <span class="n">String</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">logoRealPathDir</span> <span class="o">+</span> <span class="n">File</span><span class="o">.</span><span class="na">separator</span> <span class="o">+</span> <span class="n">logImageName</span><span class="o">;</span>
+    
+    <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    
+    <span class="n">multipartFile</span><span class="o">.</span><span class="na">transferTo</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+    
+    <span class="k">return</span> <span class="s">"success"</span><span class="o">;</span>
+    
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="测试">测试</h2>
+<blockquote>
+  <p>测试方法有两种，第一种是通过JSP构建HTML，用户手动上传，第二种是通过程序动态上传。</p>
+</blockquote>
+
+<h1 id="第一种测试用jsp为uploadjsp">第一种:测试用JSP为upload.jsp</h1>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/common/upload"</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>  
+         <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"parameter"</span> <span class="na">value=</span><span class="s">"hifreud"</span><span class="nt">/&gt;</span>  
+         <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
+         <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"upload"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></figure>
+
+<h1 id="第二种测试用程序动态控制">第二种:测试用程序动态控制</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.DataOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.HttpURLConnection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URL</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="k">try</span> <span class="o">{</span>
+
+			<span class="c1">// Could be any string</span>
+			<span class="n">String</span> <span class="n">boundary</span> <span class="o">=</span> <span class="s">"Boundary-b1ed-4060-99b9-fca7ff59c113"</span><span class="o">;</span>
+
+			<span class="n">String</span> <span class="n">Enter</span> <span class="o">=</span> <span class="s">"\r\n"</span><span class="o">;</span>
+
+			<span class="n">File</span> <span class="n">xml</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s">"E:\\test.jpg"</span><span class="o">);</span>
+			<span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">xml</span><span class="o">);</span>
+
+			<span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"http://localhost:8080/file_test/common/upload"</span><span class="o">);</span>
+
+			<span class="n">HttpURLConnection</span> <span class="n">conn</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpURLConnection</span><span class="o">)</span> <span class="n">url</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
+
+			<span class="n">conn</span><span class="o">.</span><span class="na">setDoOutput</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+			<span class="n">conn</span><span class="o">.</span><span class="na">setDoInput</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+			<span class="n">conn</span><span class="o">.</span><span class="na">setRequestMethod</span><span class="o">(</span><span class="s">"POST"</span><span class="o">);</span>
+			<span class="n">conn</span><span class="o">.</span><span class="na">setUseCaches</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+			<span class="n">conn</span><span class="o">.</span><span class="na">setInstanceFollowRedirects</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+			<span class="n">conn</span><span class="o">.</span><span class="na">setRequestProperty</span><span class="o">(</span><span class="s">"Content-Type"</span><span class="o">,</span>
+					<span class="s">"multipart/form-data;boundary="</span> <span class="o">+</span> <span class="n">boundary</span><span class="o">);</span>
+
+			<span class="n">conn</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
+
+			<span class="n">DataOutputStream</span> <span class="n">dos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DataOutputStream</span><span class="o">(</span><span class="n">conn</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">());</span>
+
+			<span class="c1">// part 1</span>
+			<span class="n">String</span> <span class="n">part1</span> <span class="o">=</span> <span class="s">"--"</span> <span class="o">+</span> <span class="n">boundary</span> <span class="o">+</span> <span class="n">Enter</span>
+					<span class="o">+</span> <span class="s">"Content-Type: application/octet-stream"</span> <span class="o">+</span> <span class="n">Enter</span>
+					<span class="o">+</span> <span class="s">"Content-Disposition: form-data; filename=\""</span>
+					<span class="o">+</span> <span class="n">xml</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"\"; name=\"file\""</span> <span class="o">+</span> <span class="n">Enter</span> <span class="o">+</span> <span class="n">Enter</span><span class="o">;</span>
+
+			<span class="c1">// part 2</span>
+			<span class="n">String</span> <span class="n">part2</span> <span class="o">=</span> <span class="n">Enter</span> <span class="o">+</span> <span class="s">"--"</span> <span class="o">+</span> <span class="n">boundary</span> <span class="o">+</span> <span class="n">Enter</span>
+					<span class="o">+</span> <span class="s">"Content-Type: text/plain"</span> <span class="o">+</span> <span class="n">Enter</span>
+					<span class="o">+</span> <span class="s">"Content-Disposition: form-data; name=\"parameter\""</span>
+					<span class="o">+</span> <span class="n">Enter</span> <span class="o">+</span> <span class="n">Enter</span> <span class="o">+</span> <span class="s">"hifreud"</span> <span class="o">+</span> <span class="n">Enter</span> <span class="o">+</span> <span class="s">"--"</span> <span class="o">+</span> <span class="n">boundary</span>
+					<span class="o">+</span> <span class="s">"--"</span><span class="o">;</span>
+
+			<span class="kt">byte</span><span class="o">[]</span> <span class="n">xmlBytes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">fis</span><span class="o">.</span><span class="na">available</span><span class="o">()];</span>
+			<span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">xmlBytes</span><span class="o">);</span>
+
+			<span class="n">dos</span><span class="o">.</span><span class="na">writeBytes</span><span class="o">(</span><span class="n">part1</span><span class="o">);</span>
+			<span class="n">dos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">xmlBytes</span><span class="o">);</span>
+			<span class="n">dos</span><span class="o">.</span><span class="na">writeBytes</span><span class="o">(</span><span class="n">part2</span><span class="o">);</span>
+
+			<span class="n">dos</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+			<span class="n">dos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"status code: "</span> <span class="o">+</span> <span class="n">conn</span><span class="o">.</span><span class="na">getResponseCode</span><span class="o">());</span>
+
+			<span class="n">conn</span><span class="o">.</span><span class="na">disconnect</span><span class="o">();</span>
+
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span>
+
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="参考资料">参考资料</h1>
+
+<p><a href="http://blog.csdn.net/sundenskyqq/article/details/6799038">springMVC 注解方式实现全程+文件上传</a></p>
+
+<p><a href="http://blog.csdn.net/zhouyingge1104/article/details/28267827">java 发送文件（Http Post），带其他参数</a></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

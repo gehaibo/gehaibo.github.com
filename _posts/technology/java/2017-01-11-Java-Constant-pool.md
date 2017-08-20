@@ -3,7 +3,7 @@ layout: post
 title:  "String常量池的深入理解"
 date:   2017-01-11 13:31:01 +0800
 categories: Java基础
-tag: Java语法糖
+tag: Java
 ---
 
 

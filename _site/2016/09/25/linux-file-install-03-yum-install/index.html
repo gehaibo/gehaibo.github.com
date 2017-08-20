@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Linux环境下的文件安装之(三) - YUM在线安装 - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2016/09/25/linux-file-install-03-yum-install/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="Linux环境下的文件安装之(三) - YUM在线安装, 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>Linux环境下的文件安装之(三) - YUM在线安装</h1>
+		    <p>Post on Sep 25, 2016 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#技术文档-ref">技术文档</a>	/
+    	<a href="/tag/#Linux-ref">Linux</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">Linux环境下的文件安装之(三) - YUM在线安装</h1>
+              <!--
+                <p class="post-meta">Sep 25, 2016</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Sep 25, 2016</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#yum源文件" id="markdown-toc-yum源文件">Yum源文件</a>    <ul>
+      <li><a href="#文件目录" id="markdown-toc-文件目录">文件目录</a></li>
+      <li><a href="#默认文件" id="markdown-toc-默认文件">默认文件</a></li>
+      <li><a href="#centos-baserepo" id="markdown-toc-centos-baserepo">CentOS-Base.repo</a></li>
+      <li><a href="#vi-etcyumreposdcentos-baserepo" id="markdown-toc-vi-etcyumreposdcentos-baserepo">vi /etc/yum.repos.d/CentOS-Base.repo</a></li>
+    </ul>
+  </li>
+  <li><a href="#光盘搭建yum源" id="markdown-toc-光盘搭建yum源">光盘搭建yum源</a>    <ul>
+      <li><a href="#挂载光盘" id="markdown-toc-挂载光盘">挂载光盘</a></li>
+      <li><a href="#使网络yum源失效" id="markdown-toc-使网络yum源失效">使网络Yum源失效</a></li>
+      <li><a href="#使光盘yum源生效" id="markdown-toc-使光盘yum源生效">使光盘Yum源生效</a></li>
+    </ul>
+  </li>
+  <li><a href="#yum命令" id="markdown-toc-yum命令">Yum命令</a></li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料：</a></li>
+</ul>
+
+<h1 id="yum源文件">Yum源文件</h1>
+
+<h2 id="文件目录">文件目录</h2>
+
+<p><code class="highlighter-rouge">/etc/yum.repos.d</code></p>
+
+<h2 id="默认文件">默认文件</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>CentOS-Base.repo</td>
+    </tr>
+    <tr>
+      <td>CentOS-Debuginfo.repo</td>
+    </tr>
+    <tr>
+      <td>CentOS-Media.repo</td>
+    </tr>
+    <tr>
+      <td>CentOS-Vault.repo</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="centos-baserepo">CentOS-Base.repo</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>base]
+<span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releaserver</span> - Base
+<span class="nv">mirrorlist</span><span class="o">=</span>http://mirrorlist.centos.org/?release<span class="o">=</span><span class="nv">$releasever</span>&amp;arch<span class="o">=</span><span class="nv">$basearch</span>&amp;repo<span class="o">=</span>os
+<span class="c">#baseurl=http://mirror.centos.org/centos/$releasevver/os/$basearch/</span>
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm<span class="o">=</span>gpg/RPM-GPG-KEY<span class="o">=</span>CentOS-6
+<span class="c">#上述中file后面`://`双斜杠代表的是协议的意思，即file协议</span></code></pre></figure>
+
+<h2 id="vi-etcyumreposdcentos-baserepo">vi /etc/yum.repos.d/CentOS-Base.repo</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>[base]</td>
+      <td>容器名称，一定要放在[]中</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>容器说明，可以自己随便写</td>
+    </tr>
+    <tr>
+      <td>mirrorlist</td>
+      <td>镜像站点，这个可以注释掉</td>
+    </tr>
+    <tr>
+      <td>baseurl</td>
+      <td>我们的YUM源服务器的地址，默认是CentOS官方的yum源服务器，是可以使用的，如果你觉得慢可以改成你喜欢的yum源地址</td>
+    </tr>
+    <tr>
+      <td>enabled</td>
+      <td>此容器是否生效，如果不写或写成enable=1都是生效，写成enable=0就是不生效</td>
+    </tr>
+    <tr>
+      <td>gpgcheck</td>
+      <td>如果是1是指RPM的数字证书生效，如果是0则不生效</td>
+    </tr>
+    <tr>
+      <td>gpgkey</td>
+      <td>数字证书的公钥文件保存位置，不用修改</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="光盘搭建yum源">光盘搭建yum源</h1>
+
+<h2 id="挂载光盘">挂载光盘</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#建立挂载点</span>
+mkdir /mnt/cdrom
+<span class="c">#挂载光盘</span>
+mount /dev/cdrom mnt/cdrom</code></pre></figure>
+
+<h2 id="使网络yum源失效">使网络Yum源失效</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#进入yum源目录</span>
+<span class="nb">cd</span> /etc/yum.repos.d/
+<span class="c">#修改yum源文件后缀名，使其失效</span>
+mv CentOS-Base.repo CentOS-Base.repo.bak</code></pre></figure>
+
+<h2 id="使光盘yum源生效">使光盘Yum源生效</h2>
+
+<p><code class="highlighter-rouge">vim CentOS-Media.repo</code></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>c6-media]
+<span class="nv">name</span><span class="o">=</span>CentOS-<span class="nv">$releasever</span> - Media
+<span class="nv">basrurl</span><span class="o">=</span>file://mnt/cdrom  <span class="c"># 地址为你自己的光盘挂载地址</span>
+<span class="c">#		file:///media/cdrom</span>
+<span class="c">#		file:///media/cdrecorder # 注释这两个不存在的地址</span>
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>1  <span class="c"># 把enabled=0改为enabled=1，让这个yum源配置文件生效</span>
+<span class="nv">gpgkey</span><span class="o">=</span>file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</code></pre></figure>
+
+<h1 id="yum命令">Yum命令</h1>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 查询所有软件包列表</span>
+<span class="o">[</span>root@localhost ~]# yum list
+
+<span class="c"># 搜索服务器上所有和关键字相关的包</span>
+<span class="o">[</span>root@localhost ~]# yum search 关键字
+
+<span class="c"># 安装命令</span>
+<span class="o">[</span>root@localhost ~]# yum -y install 包名
+ - 选项：
+ &gt; install 	安装
+ &gt; -y 		自动回答yes
+<span class="o">[</span>root@localhost ~]# yum -y install gcc 	<span class="c"># C语言编译器</span>
+
+<span class="c"># 升级命令</span>
+<span class="o">[</span>root@localhost ~]# yum -y update 包名
+ - 选项：
+ &gt; update 	升级
+ &gt; -y 		自动回答yes
+
+<span class="c"># 升级本服务器下所有的安装包，并且更新linux新内核，慎用，CentOS6.3及以前会有问题</span>
+<span class="o">[</span>root@localhost ~]# yum -y update
+
+<span class="c"># 卸载</span>
+<span class="o">[</span>root@localhost ~]# yum -y remove 包名
+ - 选项：
+ - remove	卸载
+ - -y 		自动回答yes
+<span class="c"># 服务器使用最小化安装，用什么软件安装什么，尽量不卸载</span>
+
+<span class="c"># 列出所有可用的软件组列表</span>
+<span class="o">[</span>root@localhost ~]# yum grouplist
+
+<span class="c"># 安装指定软件组，组名可以由grouplist查询出来</span>
+<span class="o">[</span>root@localhost ~]# yum groupinstall 软件组名
+<span class="c"># 注意：软件组名必须是英文</span>
+<span class="nv">LANG</span><span class="o">=</span>en_US <span class="c"># 修改语言，让显示的grouplist是英文列表</span>
+
+<span class="c"># 卸载指定软件组</span>
+<span class="o">[</span>root@localhost ~]# yum groupremove 软件组名</code></pre></figure>
+
+<p><br />
+<br /></p>
+
+<h1 id="参考资料">参考资料：</h1>
+
+<p>慕课网-Linux软件安装管理：<a href="http://www.imooc.com/learn/447">http://www.imooc.com/learn/447</a></p>
+
+<p>鸟哥的Linux私房菜: <a href="http://linux.vbird.org/linux_server/0440ntp.php">http://linux.vbird.org/linux_server/0440ntp.php</a></p>
+
+<p><br />
+<br /></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

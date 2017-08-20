@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>接口和抽象类深入思考 - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2016/05/07/java-02-interface-and-abstract-class/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="接口和抽象类深入思考, 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>接口和抽象类深入思考</h1>
+		    <p>Post on May 07, 2016 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#Java基础-ref">Java基础</a>	/
+    	<a href="/tag/#Java-ref">Java</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">接口和抽象类深入思考</h1>
+              <!--
+                <p class="post-meta">May 7, 2016</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">May 07, 2016</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#接口interface和抽象类abstract-class" id="markdown-toc-接口interface和抽象类abstract-class">接口(Interface)和抽象类(Abstract Class)</a></li>
+  <li><a href="#为什么" id="markdown-toc-为什么">为什么</a></li>
+  <li><a href="#突破" id="markdown-toc-突破">突破</a></li>
+  <li><a href="#interfaceajava" id="markdown-toc-interfaceajava">InterfaceA.java</a></li>
+  <li><a href="#interfacebjava" id="markdown-toc-interfacebjava">InterfaceB.java</a></li>
+  <li><a href="#impljava" id="markdown-toc-impljava">Impl.java</a></li>
+  <li><a href="#testclassjava" id="markdown-toc-testclassjava">TestClass.java</a></li>
+  <li><a href="#输出结果" id="markdown-toc-输出结果">输出结果</a></li>
+  <li><a href="#旁触侧通" id="markdown-toc-旁触侧通">旁触侧通</a></li>
+</ul>
+
+<h1 id="接口interface和抽象类abstract-class">接口(Interface)和抽象类(Abstract Class)</h1>
+
+<p>在java面试基本上必问的一个问题就是，抽象类和接口的区别。基本总结如下:</p>
+
+<ul>
+  <li>抽象类只能单继承(extends)；接口可以多实现(implement)</li>
+  <li>接口内部的方法必须是抽象方法，默认且必须由<code class="highlighter-rouge">public abstract</code>修饰，成员变量默认且必须是<code class="highlighter-rouge">public static final</code>修饰;对抽象类而言，本质上普通类有的，在抽象类中都可以实现，抽象类中可以定义抽象方法，并且如果定义了抽象方法，该类必须被声明为抽象类。</li>
+  <li>相同点是两者都不可以创建实例。</li>
+</ul>
+
+<h1 id="为什么">为什么</h1>
+<p>那我们很容易就想到一个问题：java语法为什么这么设计。这么设计有什么好处。解决了什么问题。
+<br />
+在这个地方Sun是想解决以下这些情况引发的冲突：</p>
+
+<ul>
+  <li>如果抽象类可以多继承。那两个抽象类中有相同的方法定义。在子类中调用的究竟是哪个。单继承避免了这个问题</li>
+  <li>如果在接口中可以定义实现方法，而接口又是可以多实现的。如果两个接口中有相同的方法定义，也会引发上面的问题。接口中不可以定义实现方法，从另一个角度避免了这个问题。</li>
+  <li>如果在接口中可以定义private并且不是static final的变量。先说private，我们知道Java是一门面向对象(OOP)语言，在类中，field代表的是属性，method代表的是动作。按照OOP的核心思想，属性通常是私有的(private)，而私有方法只有本类内部方法可见，即要依靠方法来获取或者改变。那基于上述情况，接口中最基本的就必须有getter和setter方法。而第二点中证明过的，接口中不能有实现方法。所以两者又是矛盾的。接下来是static,如果一个变量不是static的，那就只有两种方式能对这个变量进行操作，一是通过方法（已经证明不可以），二是通过实例化，但是接口规定是不允许实例化，并且接口中连实现方法都没有，实例化是没有意义的。两种方法都行不通，那在这个基础上定义的变量就完全没有意义。所以变量必须是static的。最后是final,final定义的字段不可更改。前面我们提到了，字段的变动在OOP中通常是依据方法来实现。而接口中完全没有实现方法。所以，在接口中，
+一个变量只能且必须是<code class="highlighter-rouge">public static final</code>的修饰的。</li>
+</ul>
+
+<h1 id="突破">突破</h1>
+<p>这种设计模式一直在jdk中被奉为真理，甚至在我经历过的这些面试中，每次都有问到接口和抽象类有什么区别。
+<br />
+那有没有可能这个真理被打破呢。是的，有可能，并且Oracle最新发布的JDK 1.8中就已经实现了。</p>
+
+<ul>
+  <li>接口中可以写实现方法</li>
+  <li>但是这个实现方法是有限制的，访问修饰符是default，或者修饰符是<code class="highlighter-rouge">public static</code>
+<br />
+JDK的解决方案是通过(接口名.super.方法名)来调用父类中的实现。代码如下</li>
+</ul>
+
+<h1 id="interfaceajava">InterfaceA.java</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
+
+<span class="cm">/**
+ *
+ * @author Freud
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">InterfaceA</span> <span class="o">{</span>
+
+	<span class="cm">/**
+	 * 静态方法A
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">methodA</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"static method from A"</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 与InterfaceB中同名方法及实现
+	 */</span>
+	<span class="k">default</span> <span class="kt">void</span> <span class="nf">method</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"method from A"</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="interfacebjava">InterfaceB.java</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
+
+<span class="cm">/**
+ *
+ * @author Freud
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">InterfaceB</span> <span class="o">{</span>
+
+	<span class="cm">/**
+	 * 静态方法B
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">methodB</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"static method from B"</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 与InterfaceA中同名方法及实现
+	 */</span>
+	<span class="k">default</span> <span class="kt">void</span> <span class="nf">method</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"method from B"</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="impljava">Impl.java</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
+
+<span class="cm">/**
+ *
+ * @author Freud
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Impl</span> <span class="kd">implements</span> <span class="n">InterfaceA</span><span class="o">,</span> <span class="n">InterfaceB</span> <span class="o">{</span>
+
+	<span class="cm">/**
+	 * 覆盖父类中的method方法，并且分别调用接口中的实现，获得输出结果
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">method</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">InterfaceA</span><span class="o">.</span><span class="na">super</span><span class="o">.</span><span class="na">method</span><span class="o">();</span>
+		<span class="n">InterfaceB</span><span class="o">.</span><span class="na">super</span><span class="o">.</span><span class="na">method</span><span class="o">();</span>
+	<span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="testclassjava">TestClass.java</h1>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
+
+<span class="cm">/**
+ *
+ * @author Freud
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="cm">/**
+	 * 测试入口
+	 *
+	 * @param args
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="n">InterfaceA</span><span class="o">.</span><span class="na">methodA</span><span class="o">();</span>
+		<span class="n">InterfaceB</span><span class="o">.</span><span class="na">methodB</span><span class="o">();</span>
+
+		<span class="n">Impl</span> <span class="n">impl</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Impl</span><span class="o">();</span>
+		<span class="n">impl</span><span class="o">.</span><span class="na">method</span><span class="o">();</span>
+
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="输出结果">输出结果</h1>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">static method from A
+static method from B
+method from A
+method from B</code></pre></figure>
+
+<h1 id="旁触侧通">旁触侧通</h1>
+<p>在做测试的过程中遇到一个super.getClass().getName()打印出来的依旧是当前类的名字。查询之后才发现。super只是一个关键字，并不代表父类的对象。</p>
+
+<p><br />
+<br /></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

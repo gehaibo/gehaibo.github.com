@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>mybatis-系列教程(二)-模拟实现基于XML和Annotation的小型Mybatis(Simulation) - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2015/01/07/mybatis-2-Simulation/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="mybatis-系列教程(二)-模拟实现基于XML和Annotation的小型Mybatis(Simulation), 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>mybatis-系列教程(二)-模拟实现基于XML和Annotation的小型Mybatis(Simulation)</h1>
+		    <p>Post on Jan 07, 2015 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#技术文档-ref">技术文档</a>	/
+    	<a href="/tag/#mybatis-ref">mybatis</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">mybatis-系列教程(二)-模拟实现基于XML和Annotation的小型Mybatis(Simulation)</h1>
+              <!--
+                <p class="post-meta">Jan 7, 2015</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Jan 07, 2015</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#所需要用到的其他工具或技术" id="markdown-toc-所需要用到的其他工具或技术">所需要用到的其他工具或技术</a></li>
+  <li><a href="#maven-dependencies" id="markdown-toc-maven-dependencies">Maven Dependencies</a></li>
+  <li><a href="#sql-建表及数据插入如果在第一节中作过可以跳过此步" id="markdown-toc-sql-建表及数据插入如果在第一节中作过可以跳过此步">SQL 建表及数据插入（如果在第一节中作过，可以跳过此步）</a></li>
+  <li><a href="#mybatis配置文件" id="markdown-toc-mybatis配置文件">Mybatis配置文件</a>    <ul>
+      <li><a href="#test-mybatis-configurationxml" id="markdown-toc-test-mybatis-configurationxml">test-mybatis-configuration.xml</a></li>
+      <li><a href="#userjava对象类" id="markdown-toc-userjava对象类">User.java对象类</a></li>
+      <li><a href="#selectjava-注解类" id="markdown-toc-selectjava-注解类">Select.java 注解类</a></li>
+      <li><a href="#usermapperjava" id="markdown-toc-usermapperjava">UserMapper.java</a></li>
+      <li><a href="#mapperjava-对象类" id="markdown-toc-mapperjava-对象类">Mapper.java 对象类</a></li>
+      <li><a href="#sqlselectproxyjava-aop动态代理类" id="markdown-toc-sqlselectproxyjava-aop动态代理类">SQLSelectProxy.java AOP动态代理类</a></li>
+      <li><a href="#sqlsessionjava-mybatis模拟接口" id="markdown-toc-sqlsessionjava-mybatis模拟接口">SqlSession.java Mybatis模拟接口</a></li>
+      <li><a href="#sqlsessionfactoryjava-mybatis模拟类" id="markdown-toc-sqlsessionfactoryjava-mybatis模拟类">SqlSessionFactory.java Mybatis模拟类</a></li>
+      <li><a href="#sqlsessionfactorybuilderjava-mybatis模拟类" id="markdown-toc-sqlsessionfactorybuilderjava-mybatis模拟类">SqlSessionFactoryBuilder.java Mybatis模拟类</a></li>
+      <li><a href="#sqlsessionimpljava-mybatis模拟类" id="markdown-toc-sqlsessionimpljava-mybatis模拟类">SqlSessionImpl.java Mybatis模拟类</a></li>
+      <li><a href="#usermapperxml-基于xml的mapper配置文件" id="markdown-toc-usermapperxml-基于xml的mapper配置文件">UserMapper.xml 基于XML的Mapper配置文件</a></li>
+      <li><a href="#testmybatisjava-测试类" id="markdown-toc-testmybatisjava-测试类">TestMyBatis.java 测试类</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="所需要用到的其他工具或技术">所需要用到的其他工具或技术</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td>项目管理工具</td>
+      <td>Maven</td>
+    </tr>
+    <tr>
+      <td>测试运行工具</td>
+      <td>Junit</td>
+    </tr>
+    <tr>
+      <td>数据库</td>
+      <td>Derby</td>
+    </tr>
+    <tr>
+      <td>XML操作工具</td>
+      <td>Dom4j</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>继续不废话</p>
+
+<h1 id="maven-dependencies">Maven Dependencies</h1>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>4.9<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.apache.derby<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>derby<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>10.10.2.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.apache.derby<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>derbyclient<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>10.10.2.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>dom4j<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>dom4j<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>1.6.1<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+<h1 id="sql-建表及数据插入如果在第一节中作过可以跳过此步">SQL 建表及数据插入（如果在第一节中作过，可以跳过此步）</h1>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">USER_TEST_TB</span><span class="p">(</span>
+<span class="n">ID</span> <span class="n">INT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+<span class="n">USERNAME</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">PASSWORD</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">NICKNAME</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">USER_TEST_TB</span> <span class="k">VALUES</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'1st'</span><span class="p">,</span><span class="s1">'111'</span><span class="p">,</span><span class="s1">'Jack'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">USER_TEST_TB</span> <span class="k">VALUES</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2nd'</span><span class="p">,</span><span class="s1">'222'</span><span class="p">,</span><span class="s1">'Rose'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">USER_TEST_TB</span> <span class="k">VALUES</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'3rd'</span><span class="p">,</span><span class="s1">'333'</span><span class="p">,</span><span class="s1">'Will'</span><span class="p">);</span></code></pre></figure>
+
+<h1 id="mybatis配置文件">Mybatis配置文件</h1>
+
+<p><code class="highlighter-rouge">src/main/resource</code>源目录下</p>
+
+<h2 id="test-mybatis-configurationxml">test-mybatis-configuration.xml</h2>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;properties&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"driver"</span> <span class="na">value=</span><span class="s">"org.apache.derby.jdbc.ClientDriver"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"url"</span>
+			<span class="na">value=</span><span class="s">"jdbc:derby://localhost:1527/freud;create=true"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;environments</span> <span class="na">default=</span><span class="s">"development"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">"development"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;transactionManager</span> <span class="na">type=</span><span class="s">"JDBC"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">"POOLED"</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"driver"</span> <span class="na">value=</span><span class="s">"${driver}"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"url"</span> <span class="na">value=</span><span class="s">"${url}"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/dataSource&gt;</span>
+		<span class="nt">&lt;/environment&gt;</span>
+	<span class="nt">&lt;/environments&gt;</span>
+	<span class="nt">&lt;mappers&gt;</span>
+		<span class="nt">&lt;mapper</span> <span class="na">class=</span><span class="s">"com.freud.practice.annotation.UserMapper"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"com/freud/practice/xml/UserMapper.xml"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/mappers&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span></code></pre></figure>
+
+<h2 id="userjava对象类">User.java对象类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * User Model
+ * 
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span>
+<span class="o">{</span>
+
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">id</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">nickname</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getId</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">username</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">password</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getNickname</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">nickname</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNickname</span><span class="o">(</span><span class="n">String</span> <span class="n">nickname</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">nickname</span> <span class="o">=</span> <span class="n">nickname</span><span class="o">;</span>
+	<span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="selectjava-注解类">Select.java 注解类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/annotation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">annotation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.lang.annotation.ElementType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+
+<span class="cm">/** 标注此注解只能用在方法上 */</span>
+<span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">METHOD</span><span class="o">)</span>
+<span class="cm">/** 标注此注解生命周期是在Runtime运行时 */</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">Select</span>
+<span class="o">{</span>
+	<span class="n">String</span> <span class="nf">value</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="usermapperjava">UserMapper.java</h2>
+
+<p>基于Annotation的配置类<code class="highlighter-rouge">src/main/java/com/freud/practice/annotation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">annotation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.freud.practice.User</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserMapper</span>
+<span class="o">{</span>
+
+	<span class="nd">@Select</span><span class="o">(</span><span class="s">"select * from USER_TEST_TB"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="nf">getUser</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="mapperjava-对象类">Mapper.java 对象类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * 存储查询结果对象
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Mapper</span>
+<span class="o">{</span>
+	<span class="cm">/**
+	 * 返回类型
+	 */</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">resultType</span><span class="o">;</span>
+
+	<span class="cm">/**
+	 * 查询ＳＱＬ
+	 */</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">querySql</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getResultType</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">resultType</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setResultType</span><span class="o">(</span><span class="n">String</span> <span class="n">resultType</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">resultType</span> <span class="o">=</span> <span class="n">resultType</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getQuerySql</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">querySql</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setQuerySql</span><span class="o">(</span><span class="n">String</span> <span class="n">querySql</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">querySql</span> <span class="o">=</span> <span class="n">querySql</span><span class="o">;</span>
+	<span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="sqlselectproxyjava-aop动态代理类">SQLSelectProxy.java AOP动态代理类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.freud.practice.annotation.Select</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationHandler</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.PreparedStatement</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.ResultSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SQLSelectProxy</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span>
+<span class="o">{</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span>
+	<span class="o">{</span>
+		<span class="cm">/**
+		 * 获得Mapper方法上的Select注解,以此来取得注解中的SQL语句
+		 */</span>
+		<span class="n">Select</span> <span class="n">select</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">Select</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+		<span class="k">if</span> <span class="o">(!</span><span class="n">method</span><span class="o">.</span><span class="na">isAnnotationPresent</span><span class="o">(</span><span class="n">Select</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
+		<span class="o">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"缺少@Select注解!"</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="n">PreparedStatement</span> <span class="n">pstmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="n">pstmt</span> <span class="o">=</span> <span class="n">SqlSessionImpl</span><span class="o">.</span><span class="na">connection</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">select</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
+			<span class="n">rs</span> <span class="o">=</span> <span class="n">pstmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+
+			<span class="cm">/**
+			 * 获得Method的返回对象类型,此处应当作判断处理,当List的时候,当只返回一个对象的时候. 
+			 * 为了简单实现功能并与第一节中测试文件不发生冲突起见,此处当作List处理
+			 */</span>
+			<span class="n">String</span> <span class="n">returnType</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getGenericReturnType</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span><span class="c1">//java.util.List&lt;com.freud.practice.User&gt;</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="n">returnType</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">()))</span>
+			<span class="o">{</span>
+				<span class="c1">//去掉我们不需要的字符串，得到List中的类型</span>
+				<span class="n">returnType</span> <span class="o">=</span> <span class="n">returnType</span><span class="o">.</span><span class="na">replace</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="s">""</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">"&lt;"</span><span class="o">,</span> <span class="s">""</span><span class="o">).</span><span class="na">replace</span><span class="o">(</span><span class="s">"&gt;"</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">else</span>
+			<span class="o">{</span>
+				<span class="c1">// 返回其他对象应当作其他处理，此处为了简单起见，暂不处理</span>
+			<span class="o">}</span>
+			<span class="n">obj</span> <span class="o">=</span> <span class="n">SqlSessionImpl</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">rs</span><span class="o">,</span> <span class="n">returnType</span><span class="o">);</span>
+
+		<span class="o">}</span>
+		<span class="k">finally</span>
+		<span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">rs</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">rs</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span>
+			<span class="o">{</span>
+				<span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">pstmt</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">pstmt</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span>
+			<span class="o">{</span>
+				<span class="n">pstmt</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">obj</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="sqlsessionjava-mybatis模拟接口">SqlSession.java Mybatis模拟接口</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * 模拟SqlSession
+ * 
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SqlSession</span>
+<span class="o">{</span>
+
+	<span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">getMapper</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">clazz</span><span class="o">);</span>
+
+	<span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">(</span><span class="n">String</span> <span class="n">query</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="sqlsessionfactoryjava-mybatis模拟类">SqlSessionFactory.java Mybatis模拟类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.dom4j.Document</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.dom4j.DocumentException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.dom4j.Element</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.dom4j.io.SAXReader</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * 模拟SqlSessionFactory
+ * 
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SqlSessionFactory</span>
+<span class="o">{</span>
+
+	<span class="kd">private</span> <span class="n">InputStream</span> <span class="n">configuration</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="n">SqlSession</span> <span class="nf">openSession</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span>
+	<span class="o">{</span>
+		<span class="n">SqlSessionImpl</span> <span class="n">session</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionImpl</span><span class="o">();</span>
+		<span class="n">loadConfigurations</span><span class="o">(</span><span class="n">session</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">session</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 通过Ｄｏｍ４ｊ读取配置文件信息
+	 * 
+	 * @param session
+	 * @throws IOException
+	 */</span>
+	<span class="kd">private</span> <span class="kt">void</span> <span class="nf">loadConfigurations</span><span class="o">(</span><span class="kd">final</span> <span class="n">SqlSessionImpl</span> <span class="n">session</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+	<span class="o">{</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="n">Document</span> <span class="n">document</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SAXReader</span><span class="o">().</span><span class="na">read</span><span class="o">(</span><span class="n">configuration</span><span class="o">);</span>
+			<span class="n">Element</span> <span class="n">root</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="na">getRootElement</span><span class="o">();</span>
+
+			<span class="n">List</span><span class="o">&lt;</span><span class="n">Element</span><span class="o">&gt;</span> <span class="n">mappers</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">element</span><span class="o">(</span><span class="s">"mappers"</span><span class="o">).</span><span class="na">elements</span><span class="o">(</span><span class="s">"mapper"</span><span class="o">);</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">Element</span> <span class="n">mapper</span> <span class="o">:</span> <span class="n">mappers</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">mapper</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"resource"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+				<span class="o">{</span>
+					<span class="n">session</span><span class="o">.</span><span class="na">setXmlSQLs</span><span class="o">(</span><span class="n">loadXMLConfiguration</span><span class="o">(</span><span class="n">mapper</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"resource"</span><span class="o">).</span><span class="na">getText</span><span class="o">()));</span>
+				<span class="o">}</span>
+
+				<span class="k">if</span> <span class="o">(</span><span class="n">mapper</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"class"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+				<span class="o">{</span>
+
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"读取配置文件错误!"</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">finally</span>
+		<span class="o">{</span>
+			<span class="n">configuration</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 通过ｄｏｍ４ｊ读取Ｍａｐｐｅｒ．ｘｍｌ中的信息
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws DocumentException
+	 * @throws IOException
+	 */</span>
+	<span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;</span> <span class="nf">loadXMLConfiguration</span><span class="o">(</span><span class="n">String</span> <span class="n">resource</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">DocumentException</span><span class="o">,</span> <span class="n">IOException</span>
+	<span class="o">{</span>
+		<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;();</span>
+		<span class="n">InputStream</span> <span class="n">is</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="n">is</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+
+			<span class="n">Document</span> <span class="n">document</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SAXReader</span><span class="o">().</span><span class="na">read</span><span class="o">(</span><span class="n">is</span><span class="o">);</span>
+			<span class="n">Element</span> <span class="n">root</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="na">getRootElement</span><span class="o">();</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"mapper"</span><span class="o">))</span>
+			<span class="o">{</span>
+
+				<span class="n">String</span> <span class="n">namespace</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"namespace"</span><span class="o">).</span><span class="na">getText</span><span class="o">();</span>
+
+				<span class="k">for</span> <span class="o">(</span><span class="n">Element</span> <span class="n">select</span> <span class="o">:</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Element</span><span class="o">&gt;)</span> <span class="n">root</span><span class="o">.</span><span class="na">elements</span><span class="o">(</span><span class="s">"select"</span><span class="o">))</span>
+				<span class="o">{</span>
+					<span class="n">Mapper</span> <span class="n">mapperModel</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mapper</span><span class="o">();</span>
+					<span class="n">mapperModel</span><span class="o">.</span><span class="na">setResultType</span><span class="o">(</span><span class="n">select</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"resultType"</span><span class="o">).</span><span class="na">getText</span><span class="o">());</span>
+					<span class="n">mapperModel</span><span class="o">.</span><span class="na">setQuerySql</span><span class="o">(</span><span class="n">select</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">trim</span><span class="o">());</span>
+
+					<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">namespace</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">select</span><span class="o">.</span><span class="na">attribute</span><span class="o">(</span><span class="s">"id"</span><span class="o">).</span><span class="na">getText</span><span class="o">(),</span> <span class="n">mapperModel</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">finally</span>
+		<span class="o">{</span>
+			<span class="n">is</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">map</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">InputStream</span> <span class="nf">getConfiguration</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">configuration</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setConfiguration</span><span class="o">(</span><span class="n">InputStream</span> <span class="n">configuration</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">configuration</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="sqlsessionfactorybuilderjava-mybatis模拟类">SqlSessionFactoryBuilder.java Mybatis模拟类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * 模拟SqlSessionFactoryBuilder
+ * 
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SqlSessionFactoryBuilder</span>
+<span class="o">{</span>
+
+	<span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">build</span><span class="o">(</span><span class="n">InputStream</span> <span class="n">is</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="n">SqlSessionFactory</span> <span class="n">sessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactory</span><span class="o">();</span>
+		<span class="n">sessionFactory</span><span class="o">.</span><span class="na">setConfiguration</span><span class="o">(</span><span class="n">is</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">sessionFactory</span><span class="o">;</span>
+	<span class="o">}</span>
+
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="sqlsessionimpljava-mybatis模拟类">SqlSessionImpl.java Mybatis模拟类</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/simulation</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">.</span><span class="na">simulation</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Proxy</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.Connection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.DriverManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.PreparedStatement</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.ResultSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * 模拟SqlSessionImpl
+ * 
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SqlSessionImpl</span> <span class="kd">implements</span> <span class="n">SqlSession</span>
+<span class="o">{</span>
+
+	<span class="cm">/** DB connection */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="n">Connection</span> <span class="n">connection</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;</span> <span class="n">xmlSQLs</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">annotationClasses</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="nf">SqlSessionImpl</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="cm">/**
+		 * driverString 和 connString 应该是从配置文件读取，这里简化了
+		 */</span>
+		<span class="kd">final</span> <span class="n">String</span> <span class="n">driverString</span> <span class="o">=</span> <span class="s">"org.apache.derby.jdbc.ClientDriver"</span><span class="o">;</span>
+		<span class="kd">final</span> <span class="n">String</span> <span class="n">connString</span> <span class="o">=</span> <span class="s">"jdbc:derby://localhost:1527/freud;create=true"</span><span class="o">;</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">driverString</span><span class="o">);</span>
+			<span class="cm">/** 获得DB连接 */</span>
+			<span class="n">connection</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">connString</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"获取DBConnection出错！"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 基于Annotation的数据库操作
+	 * 
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">getMapper</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">clazz</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="n">T</span> <span class="n">clazzImpl</span> <span class="o">=</span>
+		        <span class="o">(</span><span class="n">T</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]</span> <span class="o">{</span><span class="n">clazz</span><span class="o">},</span> <span class="k">new</span> <span class="n">SQLSelectProxy</span><span class="o">());</span>
+
+		<span class="k">return</span> <span class="n">clazzImpl</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 基于XML的查询操作
+	 */</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">(</span><span class="n">String</span> <span class="n">query</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>
+	<span class="o">{</span>
+		<span class="n">PreparedStatement</span> <span class="n">pstmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="cm">/** 简单的PreparedStateme JDBC实现 */</span>
+			<span class="n">pstmt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">xmlSQLs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">query</span><span class="o">).</span><span class="na">getQuerySql</span><span class="o">());</span>
+			<span class="n">rs</span> <span class="o">=</span> <span class="n">pstmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+			<span class="cm">/** 执行查询操作 */</span>
+			<span class="k">return</span> <span class="nf">executeQuery</span><span class="o">(</span><span class="n">rs</span><span class="o">,</span> <span class="n">xmlSQLs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">query</span><span class="o">).</span><span class="na">getResultType</span><span class="o">());</span>
+		<span class="o">}</span>
+		<span class="k">finally</span>
+		<span class="o">{</span>
+			<span class="k">if</span> <span class="o">(!</span><span class="n">rs</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span>
+			<span class="o">{</span>
+				<span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+
+			<span class="k">if</span> <span class="o">(!</span><span class="n">pstmt</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span>
+			<span class="o">{</span>
+				<span class="n">pstmt</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 执行查询操作，并将查询到的结果与配置中的ResultType根据变量名一一对应，通过反射调用Set方法注入各个变量的值
+	 * 
+	 * @param rs
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="nf">executeQuery</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="n">String</span> <span class="n">type</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>
+	<span class="o">{</span>
+		<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">().</span><span class="na">getColumnCount</span><span class="o">();</span>
+
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">columnNames</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">count</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+		<span class="o">{</span>
+			<span class="n">columnNames</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">().</span><span class="na">getColumnName</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+		<span class="o">}</span>
+
+		<span class="kd">final</span> <span class="n">List</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;();</span>
+
+		<span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span>
+		<span class="o">{</span>
+			<span class="n">Class</span> <span class="n">modelClazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+			<span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">modelClazz</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">Method</span> <span class="n">setMethods</span> <span class="o">:</span> <span class="n">modelClazz</span><span class="o">.</span><span class="na">getMethods</span><span class="o">())</span>
+			<span class="o">{</span>
+				<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">columnName</span> <span class="o">:</span> <span class="n">columnNames</span><span class="o">)</span>
+				<span class="o">{</span>
+					<span class="k">if</span> <span class="o">(</span><span class="n">setMethods</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"set"</span> <span class="o">+</span> <span class="n">columnName</span><span class="o">))</span>
+					<span class="o">{</span>
+						<span class="n">setMethods</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">columnName</span><span class="o">));</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+		<span class="o">}</span>
+
+		<span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;</span> <span class="nf">getXmlSQLs</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">xmlSQLs</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setXmlSQLs</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">&gt;</span> <span class="n">xmlSQLs</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">xmlSQLs</span> <span class="o">=</span> <span class="n">xmlSQLs</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">getAnnotationClasses</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="n">annotationClasses</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAnnotationClasses</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">annotationClasses</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">annotationClasses</span> <span class="o">=</span> <span class="n">annotationClasses</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="usermapperxml-基于xml的mapper配置文件">UserMapper.xml 基于XML的Mapper配置文件</h2>
+
+<p><code class="highlighter-rouge">src/main/java/com/freud/practice/xml</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+  <span class="c">&lt;!-- namespace 当基于XML进行配置的时候是根据namespace+id来拼接进行SQL操作 --&gt;</span>
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">"com.freud.practice.UserMapper"</span><span class="nt">&gt;</span>
+	<span class="c">&lt;!-- select 查询 --&gt;</span>
+	<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"getUser"</span> <span class="na">resultType=</span><span class="s">"com.freud.practice.User"</span><span class="nt">&gt;</span>
+		select *
+		from USER_TEST_TB
+	<span class="nt">&lt;/select&gt;</span>
+<span class="nt">&lt;/mapper&gt;</span></code></pre></figure>
+
+<h2 id="testmybatisjava-测试类">TestMyBatis.java 测试类</h2>
+
+<p><code class="highlighter-rouge">src/test/java/com/freud/practice</code>目录下</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">practice</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.freud.practice.annotation.UserMapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.freud.practice.simulation.SqlSession</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.freud.practice.simulation.SqlSessionFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.freud.practice.simulation.SqlSessionFactoryBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.freud.practice.simulation.SqlSessionImpl</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.SQLException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.MessageFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.junit.After</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Before</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMyBatis</span>
+<span class="o">{</span>
+
+	<span class="cm">/** 配置置文件 */</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">source</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">InputStream</span> <span class="n">inputStream</span><span class="o">;</span>
+
+	<span class="kd">private</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">;</span>
+
+	<span class="nd">@Before</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="n">source</span> <span class="o">=</span> <span class="s">"test-mybatis-configuration.xml"</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 基于XML格式配置的测试方法
+	 * 
+	 */</span>
+	<span class="nd">@Test</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testXMLConfingure</span><span class="o">()</span>
+	<span class="o">{</span>
+
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="cm">/**
+			 * 获得Session
+			 */</span>
+			<span class="n">inputStream</span> <span class="o">=</span> <span class="n">TestMyBatis</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+			<span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>
+			<span class="n">SqlSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+
+			<span class="cm">/**
+			 * 执行Ｑｕｅｒｙ操作
+			 */</span>
+			<span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">)</span> <span class="n">session</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"com.freud.practice.UserMapper.getUser"</span><span class="o">);</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Query by XML configuration..."</span><span class="o">);</span>
+
+			<span class="cm">/**
+			 * 打印结果
+			 */</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">printUsers</span><span class="o">(</span><span class="n">users</span><span class="o">);</span>
+
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * 
+	 * 基于Annotation配置的测试方法
+	 * 
+	 */</span>
+	<span class="nd">@Test</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testAnnotationConfingure</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="n">inputStream</span> <span class="o">=</span> <span class="n">TestMyBatis</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+			<span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>
+			<span class="n">SqlSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+
+			<span class="n">UserMapper</span> <span class="n">userMapper</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getMapper</span><span class="o">(</span><span class="n">UserMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\r\nQuery by annotation configuration..."</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="na">printUsers</span><span class="o">(</span><span class="n">userMapper</span><span class="o">.</span><span class="na">getUser</span><span class="o">());</span>
+
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="nd">@After</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">clearUp</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">SQLException</span>
+	<span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">SqlSessionImpl</span><span class="o">.</span><span class="na">connection</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">SqlSessionImpl</span><span class="o">.</span><span class="na">connection</span><span class="o">.</span><span class="na">isClosed</span><span class="o">())</span>
+		<span class="o">{</span>
+			<span class="n">SqlSessionImpl</span><span class="o">.</span><span class="na">connection</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="kd">private</span> <span class="kt">void</span> <span class="nf">printUsers</span><span class="o">(</span><span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+		<span class="k">for</span> <span class="o">(</span><span class="n">User</span> <span class="n">user</span> <span class="o">:</span> <span class="n">users</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">MessageFormat</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"==User[{0}]================="</span><span class="o">,</span> <span class="o">++</span><span class="n">count</span><span class="o">));</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"User Id: "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"User UserName: "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"User Password: "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getPassword</span><span class="o">());</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"User nickname: "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getNickname</span><span class="o">());</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+<span class="o">}</span></code></pre></figure>
+
+<p>以上就是基于XML以及Annotation的方式对Mybatis实现了一个简单的模拟。旨在理解Mybatis的工作原理。
+笔者一直觉得当学习一个工具类技术的时候，路线应该是</p>
+
+<ul>
+  <li>
+    <p>实现一个小例子</p>
+  </li>
+  <li>
+    <p>找材料理解其中原理</p>
+  </li>
+  <li>
+    <p>学习技术细节，并动手全部实现</p>
+  </li>
+  <li>
+    <p>在全部学完之后动手做一个小项目，尽可能的使用这个在技术中的各个环节。</p>
+  </li>
+</ul>
+
+<p>这种方法对笔者来说屡试不爽。
+现在我们已经走完了前两步，接下来就是学习技术细节了。</p>
+
+<p><br />
+<br /></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

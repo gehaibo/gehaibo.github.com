@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>mybatis-系列教程(七)-逻辑分页与物理分页（Pagination） - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2015/03/06/mybatis-7-Pagination/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="mybatis-系列教程(七)-逻辑分页与物理分页（Pagination）, 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>mybatis-系列教程(七)-逻辑分页与物理分页（Pagination）</h1>
+		    <p>Post on Mar 06, 2015 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#技术文档-ref">技术文档</a>	/
+    	<a href="/tag/#mybatis-ref">mybatis</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">mybatis-系列教程(七)-逻辑分页与物理分页（Pagination）</h1>
+              <!--
+                <p class="post-meta">Mar 6, 2015</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Mar 06, 2015</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#介绍" id="markdown-toc-介绍">介绍</a></li>
+  <li><a href="#逻辑分页" id="markdown-toc-逻辑分页">逻辑分页</a>    <ul>
+      <li><a href="#mapper的java文件" id="markdown-toc-mapper的java文件">mapper的Java文件</a></li>
+      <li><a href="#mapper的xml文件" id="markdown-toc-mapper的xml文件">mapper的xml文件</a></li>
+      <li><a href="#分页调用" id="markdown-toc-分页调用">分页调用</a></li>
+    </ul>
+  </li>
+  <li><a href="#物理分页" id="markdown-toc-物理分页">物理分页</a>    <ul>
+      <li><a href="#mybatis-configurationxml" id="markdown-toc-mybatis-configurationxml">mybatis-configuration.xml</a></li>
+      <li><a href="#offsetlimitinterceptorjava" id="markdown-toc-offsetlimitinterceptorjava">OffsetLimitInterceptor.java</a></li>
+      <li><a href="#dialectjava" id="markdown-toc-dialectjava">Dialect.java</a></li>
+      <li><a href="#reflectionutilsjava" id="markdown-toc-reflectionutilsjava">ReflectionUtils.java</a></li>
+      <li><a href="#mysqldialectjava" id="markdown-toc-mysqldialectjava">MySQLDialect.java</a></li>
+      <li><a href="#oracledialectjava" id="markdown-toc-oracledialectjava">OracleDialect.java</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="介绍">介绍</h1>
+
+<blockquote>
+  <p><code class="highlighter-rouge">逻辑分页</code> : 逻辑分页指的是将数据库中所有数据全部取出，然后通过Java代码控制分页逻辑。
+<br />
+<code class="highlighter-rouge">物理分页</code> : 物理分页指的是在SQL查询过程中实现分页，依托与不同的数据库厂商，实现也会不同。</p>
+</blockquote>
+
+<p>正是由于不同的数据库厂商所提供的分页不同，例如ORACLE是子查询实现，MySQL是limit语句实现，所以在Mybatis中，默认的实现是基于逻辑分页的。但是Mybatis支持拦截器(Interceptor),所以，我们可以根据不同的数据库，定制自己的数据库物理分页逻辑。</p>
+
+<h1 id="逻辑分页">逻辑分页</h1>
+
+<p>逻辑分页的实现很简单，只需要在查询的Mapper层添加RowBound对象即可，举例</p>
+
+<h2 id="mapper的java文件">mapper的Java文件</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">List</span><span class="o">&lt;</span><span class="n">LogType</span><span class="o">&gt;</span> <span class="nf">getLogsBySortASC</span><span class="o">(</span><span class="n">RowBounds</span> <span class="n">rb</span><span class="o">);</span></code></pre></figure>
+
+<h2 id="mapper的xml文件">mapper的xml文件</h2>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"log"</span>
+	<span class="na">type=</span><span class="s">"com.freud.test.log.beans.LogType"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"id"</span> <span class="na">jdbcType=</span><span class="s">"INTEGER"</span> <span class="na">column=</span><span class="s">"ID"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"username"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span> <span class="na">column=</span><span class="s">"OPERATOR"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"operateObject"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span> <span class="na">column=</span><span class="s">"OPERATE_OBJECT"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"operateDesc"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span> <span class="na">column=</span><span class="s">"OPERATE_DESC"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"operateTime"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span> <span class="na">column=</span><span class="s">"OPERATE_TIME"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"operateIp"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span> <span class="na">column=</span><span class="s">"OPERATE_IP"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"getLogsBySortASC"</span> <span class="na">resultMap=</span><span class="s">"log"</span><span class="nt">&gt;</span>
+	SELECT
+		ID,
+		OPERATOR,
+		OPERATE_OBJECT,
+		OPERATE_DESC,
+		OPERATE_TIME,
+		OPERATE_IP
+	FROM SYS_LOG
+	ORDER BY OPERATE_TIME ASC
+<span class="nt">&lt;/select&gt;</span></code></pre></figure>
+
+<h2 id="分页调用">分页调用</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//RowBounds第一个参数表示起始行，第二个表示取多少行</span>
+<span class="n">loggerMapper</span><span class="o">.</span><span class="na">getLogsBySortASC</span><span class="o">(</span><span class="k">new</span> <span class="n">RowBounds</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="mi">10</span><span class="o">));</span></code></pre></figure>
+
+<h1 id="物理分页">物理分页</h1>
+
+<p>在Spring的配置文件中修改sqlSessionFactory，添加configLocation</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"sqlSessionFactory"</span> <span class="na">class=</span><span class="s">"org.mybatis.spring.SqlSessionFactoryBean"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataSource"</span> <span class="na">ref=</span><span class="s">"dataSource"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"configLocation"</span>
+		<span class="na">value=</span><span class="s">"classpath:conf/mybatis/mybatis-configuration.xml"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre></figure>
+
+<h2 id="mybatis-configurationxml">mybatis-configuration.xml</h2>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="cp">&lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;plugins&gt;</span>
+		<span class="nt">&lt;plugin</span> <span class="na">interceptor=</span><span class="s">"com.freud.test.mybatis.plugin.OffsetLimitInterceptor"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dialectClass"</span> <span class="na">value=</span><span class="s">"com.freud.test.mybatis.dialect.MySQLDialect"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;/plugin&gt;</span>
+	<span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span></code></pre></figure>
+
+<h2 id="offsetlimitinterceptorjava">OffsetLimitInterceptor.java</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">plugin</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Field</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.executor.Executor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.mapping.BoundSql</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.mapping.MappedStatement</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.mapping.MappedStatement.Builder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.mapping.SqlSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.plugin.Interceptor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.plugin.Intercepts</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.plugin.Invocation</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.plugin.Plugin</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.plugin.Signature</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.reflection.MetaObject</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.session.ResultHandler</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.ibatis.session.RowBounds</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.freud.test.mybatis.dialect.Dialect</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.freud.test.mybatis.util</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * @ClassName: OffsetLimitInterceptor &lt;br&gt;
+ * @Description: Mybatis 中拦截器的物理分页逻辑具体实现&lt;br&gt;
+ * 
+ * @author Freud
+ */</span>
+<span class="nd">@Intercepts</span><span class="o">({</span><span class="nd">@Signature</span><span class="o">(</span><span class="n">type</span> <span class="o">=</span> <span class="n">Executor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">"query"</span><span class="o">,</span> <span class="n">args</span> <span class="o">=</span> <span class="o">{</span><span class="n">MappedStatement</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+    <span class="n">RowBounds</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">ResultHandler</span><span class="o">.</span><span class="na">class</span><span class="o">})})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OffsetLimitInterceptor</span> <span class="kd">implements</span> <span class="n">Interceptor</span>
+<span class="o">{</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">MAPPED_STATEMENT_INDEX</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">PARAMETER_INDEX</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">ROWBOUNDS_INDEX</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+    
+    <span class="kd">static</span> <span class="kt">int</span> <span class="n">RESULT_HANDLER_INDEX</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+    
+    <span class="n">Dialect</span> <span class="n">dialect</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">intercept</span><span class="o">(</span><span class="n">Invocation</span> <span class="n">invocation</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="n">Throwable</span>
+    <span class="o">{</span>
+        <span class="n">processIntercept</span><span class="o">(</span><span class="n">invocation</span><span class="o">.</span><span class="na">getArgs</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">invocation</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="kt">void</span> <span class="nf">processIntercept</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">queryArgs</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="c1">// queryArgs = query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler)</span>
+        <span class="n">MappedStatement</span> <span class="n">ms</span> <span class="o">=</span> <span class="o">(</span><span class="n">MappedStatement</span><span class="o">)</span><span class="n">queryArgs</span><span class="o">[</span><span class="n">MAPPED_STATEMENT_INDEX</span><span class="o">];</span>
+        <span class="n">Object</span> <span class="n">parameter</span> <span class="o">=</span> <span class="n">queryArgs</span><span class="o">[</span><span class="n">PARAMETER_INDEX</span><span class="o">];</span>
+        <span class="kd">final</span> <span class="n">RowBounds</span> <span class="n">rowBounds</span> <span class="o">=</span> <span class="o">(</span><span class="n">RowBounds</span><span class="o">)</span><span class="n">queryArgs</span><span class="o">[</span><span class="n">ROWBOUNDS_INDEX</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">rowBounds</span><span class="o">.</span><span class="na">getOffset</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">limit</span> <span class="o">=</span> <span class="n">rowBounds</span><span class="o">.</span><span class="na">getLimit</span><span class="o">();</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="n">dialect</span><span class="o">.</span><span class="na">supportsLimit</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">offset</span> <span class="o">!=</span> <span class="n">RowBounds</span><span class="o">.</span><span class="na">NO_ROW_OFFSET</span> <span class="o">||</span> <span class="n">limit</span> <span class="o">!=</span> <span class="n">RowBounds</span><span class="o">.</span><span class="na">NO_ROW_LIMIT</span><span class="o">))</span>
+        <span class="o">{</span>
+            <span class="n">BoundSql</span> <span class="n">boundSql</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="na">getBoundSql</span><span class="o">(</span><span class="n">parameter</span><span class="o">);</span>
+            <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getSql</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">dialect</span><span class="o">.</span><span class="na">supportsLimitOffset</span><span class="o">())</span>
+            <span class="o">{</span>
+                <span class="n">sql</span> <span class="o">=</span> <span class="n">dialect</span><span class="o">.</span><span class="na">getLimitString</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="n">offset</span><span class="o">,</span> <span class="n">limit</span><span class="o">);</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">RowBounds</span><span class="o">.</span><span class="na">NO_ROW_OFFSET</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+            <span class="o">{</span>
+                <span class="n">sql</span> <span class="o">=</span> <span class="n">dialect</span><span class="o">.</span><span class="na">getLimitString</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">limit</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">limit</span> <span class="o">=</span> <span class="n">RowBounds</span><span class="o">.</span><span class="na">NO_ROW_LIMIT</span><span class="o">;</span>
+            
+            <span class="n">queryArgs</span><span class="o">[</span><span class="n">ROWBOUNDS_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RowBounds</span><span class="o">(</span><span class="n">offset</span><span class="o">,</span> <span class="n">limit</span><span class="o">);</span>
+            <span class="n">BoundSql</span> <span class="n">newBoundSql</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="nf">BoundSql</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">(),</span> <span class="n">sql</span><span class="o">,</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getParameterMappings</span><span class="o">(),</span> <span class="n">boundSql</span><span class="o">.</span><span class="na">getParameterObject</span><span class="o">());</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">metaParamsField</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">MetaObject</span> <span class="n">mo</span> <span class="o">=</span> <span class="o">(</span><span class="n">MetaObject</span><span class="o">)</span> <span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">getFieldValue</span><span class="o">(</span><span class="n">boundSql</span><span class="o">,</span> <span class="s">"metaParameters"</span><span class="o">);</span>
+                <span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">setFieldValue</span><span class="o">(</span><span class="n">newBoundSql</span><span class="o">,</span> <span class="s">"metaParameters"</span><span class="o">,</span> <span class="n">mo</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">MappedStatement</span> <span class="n">newMs</span> <span class="o">=</span> <span class="n">copyFromMappedStatement</span><span class="o">(</span><span class="n">ms</span><span class="o">,</span> <span class="k">new</span> <span class="n">BoundSqlSqlSource</span><span class="o">(</span><span class="n">newBoundSql</span><span class="o">));</span>
+            <span class="n">queryArgs</span><span class="o">[</span><span class="n">MAPPED_STATEMENT_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">newMs</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// see: MapperBuilderAssistant</span>
+    <span class="kd">private</span> <span class="n">MappedStatement</span> <span class="nf">copyFromMappedStatement</span><span class="o">(</span><span class="n">MappedStatement</span> <span class="n">ms</span><span class="o">,</span> <span class="n">SqlSource</span> <span class="n">newSqlSource</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">Builder</span> <span class="n">builder</span> <span class="o">=</span>
+            <span class="k">new</span> <span class="n">MappedStatement</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getConfiguration</span><span class="o">(),</span> <span class="n">ms</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">newSqlSource</span><span class="o">,</span> <span class="n">ms</span><span class="o">.</span><span class="na">getSqlCommandType</span><span class="o">());</span>
+        
+        <span class="n">builder</span><span class="o">.</span><span class="na">resource</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getResource</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">fetchSize</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getFetchSize</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">statementType</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getStatementType</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">keyGenerator</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getKeyGenerator</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">keyProperty</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getKeyProperty</span><span class="o">());</span>
+        
+        <span class="c1">// setStatementTimeout()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">timeout</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getTimeout</span><span class="o">());</span>
+        
+        <span class="c1">// setStatementResultMap()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">parameterMap</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getParameterMap</span><span class="o">());</span>
+        
+        <span class="c1">// setStatementResultMap()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">resultMaps</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getResultMaps</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">resultSetType</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getResultSetType</span><span class="o">());</span>
+        
+        <span class="c1">// setStatementCache()</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">cache</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">getCache</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">flushCacheRequired</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">isFlushCacheRequired</span><span class="o">());</span>
+        <span class="n">builder</span><span class="o">.</span><span class="na">useCache</span><span class="o">(</span><span class="n">ms</span><span class="o">.</span><span class="na">isUseCache</span><span class="o">());</span>
+        
+        <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">plugin</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="n">Plugin</span><span class="o">.</span><span class="na">wrap</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setProperties</span><span class="o">(</span><span class="n">Properties</span> <span class="n">properties</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">String</span> <span class="n">dialectClass</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"dialectClass"</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span>
+        <span class="k">try</span>
+        <span class="o">{</span>
+            <span class="n">dialect</span> <span class="o">=</span> <span class="o">(</span><span class="n">Dialect</span><span class="o">)</span><span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">dialectClass</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"cannot create dialect instance by dialectClass:"</span> <span class="o">+</span> <span class="n">dialectClass</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">BoundSqlSqlSource</span> <span class="kd">implements</span> <span class="n">SqlSource</span>
+    <span class="o">{</span>
+        <span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">;</span>
+        
+        <span class="kd">public</span> <span class="nf">BoundSqlSqlSource</span><span class="o">(</span><span class="n">BoundSql</span> <span class="n">boundSql</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">boundSql</span> <span class="o">=</span> <span class="n">boundSql</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+        <span class="kd">public</span> <span class="n">BoundSql</span> <span class="nf">getBoundSql</span><span class="o">(</span><span class="n">Object</span> <span class="n">parameterObject</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">return</span> <span class="n">boundSql</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="dialectjava">Dialect.java</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">dialect</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * @ClassName: Dialect &lt;br&gt;
+ * @Description: 类似hibernate的Dialect,但只精简出分页部分 &lt;br&gt;
+ * 
+ * @author Freud
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dialect</span>
+<span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimit</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimitOffset</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">supportsLimit</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="cm">/**
+     * 将sql变成分页sql语句,直接使用offset,limit的值作为占位符.&lt;/br&gt; 源代码为:
+     * getLimitString(sql,offset,String.valueOf(offset),limit,String.valueOf(limit))
+     */</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLimitString</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getLimitString</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="n">offset</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">offset</span><span class="o">),</span> <span class="n">limit</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">limit</span><span class="o">));</span>
+    <span class="o">}</span>
+    
+    <span class="cm">/**
+     * 将sql变成分页sql语句,提供将offset及limit使用占位符(placeholder)替换.
+     * 
+     * &lt;pre&gt;
+     * 如mysql
+     * dialect.getLimitString("select * from user", 12, ":offset",0,":limit") 将返回
+     * select * from user limit :offset,:limit
+     * &lt;/pre&gt;
+     * 
+     * @return 包含占位符的分页sql
+     */</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLimitString</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="n">String</span> <span class="n">offsetPlaceholder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">,</span> <span class="n">String</span> <span class="n">limitPlaceholder</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">UnsupportedOperationException</span><span class="o">(</span><span class="s">"paged queries not supported"</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="reflectionutilsjava">ReflectionUtils.java</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">util</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Field</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Modifier</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.Assert</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @ClassName: ReflectionUtils &lt;br&gt;
+ * @Description: 反射工具类 &lt;br&gt;
+ * 
+ * @author Freud
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ReflectionUtils</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span>
+            <span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">ReflectionUtils</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * 循环向上转型, 获取对象的DeclaredField.
+     * 
+     * 如向上转型到Object仍无法找到, 返回null.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Field</span> <span class="nf">getDeclaredField</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span> <span class="n">object</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">fieldName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="s">"object不能为空"</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">hasText</span><span class="o">(</span><span class="n">fieldName</span><span class="o">,</span> <span class="s">"fieldName"</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">superClass</span> <span class="o">=</span> <span class="n">object</span><span class="o">.</span><span class="na">getClass</span><span class="o">();</span> <span class="n">superClass</span> <span class="o">!=</span> <span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">;</span> <span class="n">superClass</span> <span class="o">=</span> <span class="n">superClass</span>
+                <span class="o">.</span><span class="na">getSuperclass</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">superClass</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="n">fieldName</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="n">NoSuchFieldException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Field不在当前类定义,继续向上转型</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Object</span> <span class="nf">getFieldValue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span> <span class="n">object</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">fieldName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">getDeclaredField</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">fieldName</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">field</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Could not find field ["</span>
+                    <span class="o">+</span> <span class="n">fieldName</span> <span class="o">+</span> <span class="s">"] on target ["</span> <span class="o">+</span> <span class="n">object</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">makeAccessible</span><span class="o">(</span><span class="n">field</span><span class="o">);</span>
+
+        <span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">object</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="n">IllegalAccessException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"不可能抛出的异常{}"</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 强行设置Field可访问.
+     */</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">makeAccessible</span><span class="o">(</span><span class="kd">final</span> <span class="n">Field</span> <span class="n">field</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">Modifier</span><span class="o">.</span><span class="na">isPublic</span><span class="o">(</span><span class="n">field</span><span class="o">.</span><span class="na">getModifiers</span><span class="o">())</span>
+                <span class="o">||</span> <span class="o">!</span><span class="n">Modifier</span><span class="o">.</span><span class="na">isPublic</span><span class="o">(</span><span class="n">field</span><span class="o">.</span><span class="na">getDeclaringClass</span><span class="o">().</span><span class="na">getModifiers</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setFieldValue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Object</span> <span class="n">object</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">fieldName</span><span class="o">,</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">getDeclaredField</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">fieldName</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">field</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Could not find field ["</span>
+                    <span class="o">+</span> <span class="n">fieldName</span> <span class="o">+</span> <span class="s">"] on target ["</span> <span class="o">+</span> <span class="n">object</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">makeAccessible</span><span class="o">(</span><span class="n">field</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">field</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="n">IllegalAccessException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"不可能抛出的异常:{}"</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="mysqldialectjava">MySQLDialect.java</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">dialect</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * @ClassName: MySQLDialect &lt;br&gt;
+ * @Description: MySql的分页方言实现 &lt;br&gt;
+ * 
+ * @author Freud
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MySQLDialect</span> <span class="kd">extends</span> <span class="n">Dialect</span>
+<span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimitOffset</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimit</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLimitString</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="n">String</span> <span class="n">offsetPlaceholder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">,</span> <span class="n">String</span> <span class="n">limitPlaceholder</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">offset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="k">return</span> <span class="n">sql</span> <span class="o">+</span> <span class="s">" limit "</span> <span class="o">+</span> <span class="n">offsetPlaceholder</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">limitPlaceholder</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">else</span>
+        <span class="o">{</span>
+            <span class="k">return</span> <span class="n">sql</span> <span class="o">+</span> <span class="s">" limit "</span> <span class="o">+</span> <span class="n">limitPlaceholder</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="oracledialectjava">OracleDialect.java</h2>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">freud</span><span class="o">.</span><span class="na">test</span><span class="o">.</span><span class="na">mybatis</span><span class="o">.</span><span class="na">dialect</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 
+ * @ClassName: OracleDialect &lt;br&gt;
+ * @Description: Oracle的分页方言实现 &lt;br&gt;
+ * 
+ * @author Freud
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OracleDialect</span> <span class="kd">extends</span> <span class="n">Dialect</span>
+<span class="o">{</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimit</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsLimitOffset</span><span class="o">()</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getLimitString</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="n">String</span> <span class="n">offsetPlaceholder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">,</span> <span class="n">String</span> <span class="n">limitPlaceholder</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="na">trim</span><span class="o">();</span>
+        <span class="kt">boolean</span> <span class="n">isForUpdate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">sql</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">().</span><span class="na">endsWith</span><span class="o">(</span><span class="s">" for update"</span><span class="o">))</span>
+        <span class="o">{</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">sql</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">11</span><span class="o">);</span>
+            <span class="n">isForUpdate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        
+        <span class="n">StringBuffer</span> <span class="n">pagingSelect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">(</span><span class="n">sql</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">100</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">offset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"select * from ( select row_.*, rownum rownum_ from ( "</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">else</span>
+        <span class="o">{</span>
+            <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"select * from ( "</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">offset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="c1">// int end = offset+limit;</span>
+            <span class="n">String</span> <span class="n">endString</span> <span class="o">=</span> <span class="n">offsetPlaceholder</span> <span class="o">+</span> <span class="s">"+"</span> <span class="o">+</span> <span class="n">limitPlaceholder</span><span class="o">;</span>
+            <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">" ) row_ ) where rownum_ &lt;= "</span> <span class="o">+</span> <span class="n">endString</span> <span class="o">+</span> <span class="s">" and rownum_ &gt; "</span> <span class="o">+</span> <span class="n">offsetPlaceholder</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">else</span>
+        <span class="o">{</span>
+            <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">" ) where rownum &lt;= "</span> <span class="o">+</span> <span class="n">limitPlaceholder</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="n">isForUpdate</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">pagingSelect</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">" for update"</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">return</span> <span class="n">pagingSelect</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></figure>
+
+<blockquote>
+  <p>调用逻辑同逻辑分页的调用</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>

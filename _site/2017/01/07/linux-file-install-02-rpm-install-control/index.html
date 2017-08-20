@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Linux环境下的文件安装之(二) - RPM命令管理 - 海波的博客</title>
+
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/styles/css/syntax.css">
+	<link rel="canonical" href="/2017/01/07/linux-file-install-02-rpm-install-control/">
+	<link rel="alternate" type="application/rss+xml" title="海波的博客" href="/feed.xml">
+
+	<meta name="keywords" content="Linux环境下的文件安装之(二) - RPM命令管理, 海波的博客, 葛海波;个人博客;">
+	<meta name="description" content="葛海波;个人博客;">
+
+	<script src="/styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.jpg">
+      </a> -->
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">大类分解</a>
+        </li>
+        <li>
+          <a href="/tag">小类内聚</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li>
+            <a><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></a>
+        </li> -->
+        <li>
+          <a href="/donate/"><strong>打赏</strong></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo">Github</a></li>
+            <li><a rel="nofollow" target="_blank" href="">关于作者</a></li>
+            <li><a rel="nofollow" href="/books">我的书单</a></li>
+            <li><a rel="nofollow" href="/reference">推荐博客</a></li>
+            <!-- <li><a href="/feed.xml">RSS订阅</a></li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li><a rel="nofollow" target="_blank" href="https://github.com/gehaibo/gehaibo.github.com">本项目</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+  		<!--
+		    <h1>Linux环境下的文件安装之(二) - RPM命令管理</h1>
+		    <p>Post on Jan 07, 2017 by <a href="/about">ghb</a></p>
+		-->
+		    <h1>Make it right before you make it faster.</h1>
+    
+  </div>
+</div>
+    
+      
+<div class="banner">
+  <div class="container">
+  	
+    	<a href="/categories/#技术文档-ref">技术文档</a>	/
+    	<a href="/tag/#Linux-ref">Linux</a>
+    
+  </div>
+</div>
+
+    
+
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2017">2017</a>
+          <ul class="nav">
+            <li><a href="#month_2017_April">April</a></li>
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2017_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2016">2016</a>
+            <ul class="nav">
+              <li><a href="#month_2016_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_September">September</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_June">June</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_May">May</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2016_March">March</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2015">2015</a>
+            <ul class="nav">
+              <li><a href="#month_2015_March">March</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_February">February</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2015_January">January</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">Linux环境下的文件安装之(二) - RPM命令管理</h1>
+              <!--
+                <p class="post-meta">Jan 7, 2017</p>
+              -->
+              <div class="meta">Posted on <span class="postdate">Jan 07, 2017</span> By <a target="_blank" href="http://localhost:4000">ghb</a></div>
+              <br />
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#rpm命令管理" id="markdown-toc-rpm命令管理">RPM命令管理</a>    <ul>
+      <li><a href="#rpm包命名原则" id="markdown-toc-rpm包命名原则">RPM包命名原则</a></li>
+      <li><a href="#rpm包依赖" id="markdown-toc-rpm包依赖">RPM包依赖</a></li>
+      <li><a href="#包全名和包名" id="markdown-toc-包全名和包名">包全名和包名</a></li>
+      <li><a href="#rpm安装" id="markdown-toc-rpm安装">RPM安装</a></li>
+      <li><a href="#升级" id="markdown-toc-升级">升级</a></li>
+      <li><a href="#卸载" id="markdown-toc-卸载">卸载</a></li>
+      <li><a href="#rpm包查询" id="markdown-toc-rpm包查询">RPM包查询</a></li>
+      <li><a href="#rpm包校验" id="markdown-toc-rpm包校验">RPM包校验</a></li>
+      <li><a href="#rpm包中文件提取" id="markdown-toc-rpm包中文件提取">RPM包中文件提取</a></li>
+    </ul>
+  </li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料</a></li>
+</ul>
+
+<h1 id="rpm命令管理">RPM命令管理</h1>
+
+<h2 id="rpm包命名原则">RPM包命名原则</h2>
+
+<blockquote>
+  <p>httpd-2.2.15-15.el6.centos.1.i686.rpm <br /></p>
+  <ul>
+    <li>httpd软件包名 <br /></li>
+    <li>2.2.15软件版本 <br /></li>
+    <li>15软件发布的次数 <br /></li>
+    <li>el6.centos适合的linux平台,可能为rhel6代表Redhat6 <br /></li>
+    <li>i686适合的硬件平台，可能i386,x86_64,x64等 <br /></li>
+    <li>rpm rpm包扩展名</li>
+  </ul>
+</blockquote>
+
+<h2 id="rpm包依赖">RPM包依赖</h2>
+
+<ul>
+  <li>树形依赖：a-&gt;b-&gt;c</li>
+  <li>环形依赖：a-&gt;b-&gt;c-&gt;a</li>
+  <li>模块依赖：查询网站<a href="http://www.rpmfind.net/">http://www.rpmfind.net/</a></li>
+</ul>
+
+<h2 id="包全名和包名">包全名和包名</h2>
+
+<ul>
+  <li>包全名：操作的包是没有安装的软件包时，使用包全名，而且要注意路径</li>
+  <li>包名：操作已经安装的软件包时，使用包名，是搜索/var/lib/rpm中的数据库</li>
+</ul>
+
+<h2 id="rpm安装">RPM安装</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm -ivh h
+<span class="gp">&gt; </span>选项：
+<span class="gp">&gt; </span>-i<span class="o">(</span>install<span class="o">)</span> 安装
+<span class="gp">&gt; </span>-v<span class="o">(</span>verbose<span class="o">)</span> 显示详细信息
+<span class="gp">&gt; </span>-h<span class="o">(</span><span class="nb">hash</span><span class="o">)</span> 显示进度
+<span class="gp">&gt; </span>--nodeps 不检测依赖性</code></pre></figure>
+
+<h2 id="升级">升级</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm -Uvh 包全名
+<span class="gp">&gt; </span>选项
+<span class="gp">&gt; </span>-U<span class="o">(</span>upgrade<span class="o">)</span> 升级</code></pre></figure>
+
+<h2 id="卸载">卸载</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm -e 包名
+<span class="gp">&gt; </span>选项
+<span class="gp">&gt; </span>-e<span class="o">(</span>erase<span class="o">)</span> 卸载
+<span class="gp">&gt; </span>--nodeps不检查依赖性</code></pre></figure>
+
+<h2 id="rpm包查询">RPM包查询</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm -q 包名
+<span class="c"># 查询包是否安装</span>
+<span class="gp">&gt; </span>-q 查询<span class="o">(</span>query<span class="o">)</span>
+
+<span class="o">[</span>root@localhost ~]# rpm -qa
+<span class="c"># 查询所有已经安装的RPM包</span>
+<span class="gp">&gt; </span>-a 所有<span class="o">(</span>all<span class="o">)</span>
+
+<span class="o">[</span>root@localhost ~]# rpm -qi 包名
+<span class="c"># 查询软件包详细信息</span>
+<span class="gp">&gt; </span>-i 查询软件信息<span class="o">(</span>information<span class="o">)</span>
+<span class="gp">&gt; </span>-p 查询未安装包信息<span class="o">(</span>package<span class="o">)</span>
+
+<span class="o">[</span>root@localhost ~]# rpm -ql 包名
+<span class="c"># 查询包中文件安装位置</span>
+<span class="gp">&gt; </span>-l 列表<span class="o">(</span>list<span class="o">)</span>
+<span class="gp">&gt; </span>-p 查询未安装包信息<span class="o">(</span>package<span class="o">)</span>
+
+<span class="o">[</span>root@localhost ~]# rpm -qf 系统文件名
+<span class="c"># 查询系统文件属于哪个RPM包</span>
+<span class="gp">&gt; </span>-f 查询系统文件属于哪个软件包<span class="o">(</span>file<span class="o">)</span>
+
+<span class="o">[</span>root@localhost ~]# rpm -qR 包名
+<span class="c"># 查询软件包的依赖性</span>
+<span class="gp">&gt; </span>-R 查询软件包的依赖性<span class="o">(</span>requires<span class="o">)</span>
+<span class="gp">&gt; </span>-p 查询未安装包信息<span class="o">(</span>package<span class="o">)</span></code></pre></figure>
+
+<ul>
+  <li>RPM包默认安装位置</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>路径</td>
+      <td>释义</td>
+    </tr>
+    <tr>
+      <td>/etc/</td>
+      <td>配置文件安装目录</td>
+    </tr>
+    <tr>
+      <td>/usr/bin/</td>
+      <td>可执行的命令安装目录</td>
+    </tr>
+    <tr>
+      <td>/usr/lib/</td>
+      <td>程序所使用的函数库保存位置</td>
+    </tr>
+    <tr>
+      <td>/usr/share/doc/</td>
+      <td>基本的软件使用手册保存位置</td>
+    </tr>
+    <tr>
+      <td>/usr/share/man/</td>
+      <td>帮助文件保存位置</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="rpm包校验">RPM包校验</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm -V 已安装的包名
+<span class="c"># RPM包校验</span>
+<span class="gp">&gt; </span>选项
+<span class="gp">&gt; </span>-V 校验指定RPM包中的文件<span class="o">(</span>verify<span class="o">)</span>
+
+S.5....T.  c /etc/httpd/conf/httpd/conf</code></pre></figure>
+
+<ul>
+  <li>验证内容中的8个信息的具体内容如下：</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>S</td>
+      <td>文件大小是否改变</td>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td>文件的类型或文件的权限(rwx)是否被改变</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>文件MD5校验和是否改变(可以看成文件内容是否改变)</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>设备的主从代码是否改变</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>文件路径是否改变</td>
+    </tr>
+    <tr>
+      <td>U</td>
+      <td>文件的属主(所有者)是否改变</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>文件的属组是否改变</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>文件的修改时间是否改变</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>验证的文件类型</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>c</td>
+      <td>配置文件(config file)</td>
+    </tr>
+    <tr>
+      <td>d</td>
+      <td>普通文件(documentation)</td>
+    </tr>
+    <tr>
+      <td>g</td>
+      <td>鬼文件(ghost file), 很少见，就是该文件不应该被这个RPM包包含</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>授权文件(license file)</td>
+    </tr>
+    <tr>
+      <td>r</td>
+      <td>描述文件(read me)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="rpm包中文件提取">RPM包中文件提取</h2>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# rpm2cpio 包全名 | cpio -idv .文件绝对路径
+<span class="gp">&gt; </span>-rpm2cpio 将rpm包转换为cpio格式的命令
+<span class="gp">&gt; </span>-cpio 是一个标准工具，它用于创建软件档案文件和从档案文件中提取文件</code></pre></figure>
+
+<ul>
+  <li>cpio</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost ~]# cpio 选项 &lt; <span class="o">[</span>文件|设备]
+<span class="gp">&gt; </span>选项
+<span class="gp">&gt; </span>-i:copy-in模式，还原
+<span class="gp">&gt; </span>-d:还原时自动新建目录
+<span class="gp">&gt; </span>-v:显示还原过程</code></pre></figure>
+
+<p><br />
+<br /></p>
+
+<h1 id="参考资料">参考资料</h1>
+
+<p>慕课网-Linux软件安装管理：<a href="http://www.imooc.com/learn/447">http://www.imooc.com/learn/447</a></p>
+
+<p>鸟哥的Linux私房菜: <a href="http://linux.vbird.org/linux_server/0440ntp.php">http://linux.vbird.org/linux_server/0440ntp.php</a></p>
+
+<p><br />
+<br /></p>
+
+            </article>
+        </div>
+      </div>
+      <div class="panel docs-content">
+        <article class="post-content">
+          <div class="wrapper">
+             
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2017 <a href=""><code>ghb</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a></p>
+	</div>
+</footer>
+
+<script src="/styles/js/jquery.min.js"></script>
+<script src="/styles/js/bootstrap.min.js"></script>
+<script src="/styles/js/holder.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>
